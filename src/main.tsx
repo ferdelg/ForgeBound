@@ -8,10 +8,16 @@ import "@fontsource/alegreya-sans/500.css";
 import "@fontsource/alegreya-sans/700.css";
 import "@fontsource/alegreya-sans/800.css";
 import "./index.css";
-import App from "./App";
+import { initStorage } from "./storage";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+// Load the save (from the Flinsh store when hosted there) before any game
+// module runs: audio settings and the panel layout are read at import time.
+initStorage().then(async () => {
+  const { default: App } = await import("./App");
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+  window.flinsh?.ready?.();
+});

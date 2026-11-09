@@ -1,0 +1,8 @@
+{
+  "flinsh": "2",
+  "name": "ForgeBound",
+  "description": "An offline skilling RPG: chop, mine, fish, smelt and smith. Your save lives in Flinsh.",
+  "type": "app",
+  "entrypoint": "dist/index.html",
+  "permissions": ["store:user"]
+}

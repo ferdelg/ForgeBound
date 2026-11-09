@@ -2,12 +2,13 @@
 // Browsers only allow entering it from a click or key press, so the login's
 // Begin / Continue buttons (or the Settings toggle) are what trigger it.
 import { useEffect, useState } from "react";
+import * as storage from "../storage";
 
 const PREF_KEY = "forgebound-fullscreen";
 
 export function fullscreenPref(): boolean {
   try {
-    return localStorage.getItem(PREF_KEY) === "1";
+    return storage.getItem(PREF_KEY) === "1";
   } catch {
     return false;
   }
@@ -15,7 +16,7 @@ export function fullscreenPref(): boolean {
 
 export function setFullscreenPref(on: boolean) {
   try {
-    localStorage.setItem(PREF_KEY, on ? "1" : "0");
+    storage.setItem(PREF_KEY, on ? "1" : "0");
   } catch {
     // ignore — the toggle just won't be remembered
   }

@@ -1,8 +1,9 @@
 // Layout of the docked side panel: a column of panes, each holding one or
 // more tabs. Kept in a tiny module store (not React state) so the desktop
 // column and the mobile drawer show the same layout, and remembered per
-// browser in localStorage.
+// player through the storage adapter (Flinsh store or localStorage).
 import { useSyncExternalStore } from "react";
+import * as storage from "../storage";
 
 export type TabId = "inv" | "skills" | "prayer" | "quests" | "gear";
 
@@ -42,7 +43,7 @@ function normalize(panes: Pane[]): Pane[] {
 
 function load(): Pane[] {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = storage.getItem(KEY);
     if (raw) return normalize(JSON.parse(raw));
   } catch {
     // fall through to the default
@@ -56,7 +57,7 @@ const listeners = new Set<() => void>();
 function commit(next: Pane[]) {
   panes = normalize(next);
   try {
-    localStorage.setItem(KEY, JSON.stringify(panes));
+    storage.setItem(KEY, JSON.stringify(panes));
   } catch {
     // layout just won't be remembered
   }

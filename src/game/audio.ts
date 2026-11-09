@@ -7,6 +7,7 @@
  * from the music and effects buses, so everything sits in the same space.
  */
 import type { NpcId } from "./types";
+import * as storage from "../storage";
 let ctx: AudioContext | null = null;
 
 export interface AudioSettings {
@@ -21,7 +22,7 @@ const DEFAULTS: AudioSettings = { muted: false, music: 0.55, effects: 0.8 };
 
 function loadSettings(): AudioSettings {
   try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
+    const raw = storage.getItem(SETTINGS_KEY);
     if (raw) {
       const p = JSON.parse(raw);
       return {
@@ -117,7 +118,7 @@ export const getAudioSettings = (): AudioSettings => ({ ...settings });
 export function setAudioSettings(next: Partial<AudioSettings>) {
   settings = { ...settings, ...next };
   try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    storage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   } catch {
     // just won't be remembered
   }

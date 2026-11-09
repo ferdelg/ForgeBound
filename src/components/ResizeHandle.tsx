@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import * as storage from "../storage";
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
 function readStored(key: string, fallback: number): number {
   try {
-    const n = Number(localStorage.getItem(key));
+    const n = Number(storage.getItem(key));
     return Number.isFinite(n) && n > 0 ? n : fallback;
   } catch {
     return fallback;
@@ -12,7 +13,7 @@ function readStored(key: string, fallback: number): number {
 }
 
 /**
- * A panel dimension the player can drag, remembered in localStorage.
+ * A panel dimension the player can drag, remembered through the storage adapter.
  * `max` may be a function so limits follow the window size.
  */
 export function useStoredSize(key: string, initial: number, min: number, max: number | (() => number)) {
@@ -29,7 +30,7 @@ export function useStoredSize(key: string, initial: number, min: number, max: nu
   const set = useCallback((v: number) => setSize(clamp(v, min, maxOf())), [min, maxOf]);
   const persist = useCallback((v: number) => {
     try {
-      localStorage.setItem(key, String(Math.round(v)));
+      storage.setItem(key, String(Math.round(v)));
     } catch {
       // ignore — size just won't be remembered
     }

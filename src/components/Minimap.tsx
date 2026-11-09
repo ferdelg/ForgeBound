@@ -3,6 +3,7 @@ import type { GameApi } from "../game/useGame";
 import { BUILDINGS, MAP_H, MAP_W, UNDER_Y, groundAt, isUnderground, objAt } from "../game/map";
 import { ORE_COLORS } from "../game/render";
 import { roofColor } from "../game/village";
+import * as storage from "../storage";
 
 /** On-screen size of one tile at 1× zoom (CSS px). */
 const SCALE = 3;
@@ -19,7 +20,7 @@ const DEFAULT_ZOOM = 2;
 
 function storedZoom(): number {
     try {
-        const z = Number(localStorage.getItem(ZOOM_KEY));
+        const z = Number(storage.getItem(ZOOM_KEY));
         return ZOOMS.includes(z) ? z : DEFAULT_ZOOM;
     } catch {
         return DEFAULT_ZOOM;
@@ -348,7 +349,7 @@ export function Minimap({ api }: { api: GameApi }) {
     const setZoom = (z: number) => {
         zoomRef.current = z;
         setZoomState(z);
-        try { localStorage.setItem(ZOOM_KEY, String(z)); } catch { /* ignore */ }
+        try { storage.setItem(ZOOM_KEY, String(z)); } catch { /* ignore */ }
     };
     const step = (d: number) => {
         const i = ZOOMS.indexOf(zoomRef.current) + d;

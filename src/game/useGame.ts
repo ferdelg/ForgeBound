@@ -49,6 +49,7 @@ import { MAX_XP, SKILLS, SKILL_BY_ID, fmt, levelForXp } from "./xp";
 import { sfx, type Ground } from "./audio";
 import { WARP_MS, emote, jobOf, strikesDone } from "./anim";
 import { NPC_NAME, QUESTS, currentStepOf, eventMatches, questPointsOf, stepProgressOf, today, type QuestDef } from "./quests";
+import * as storage from "../storage";
 
 export const SAVE_KEY = "forgebound-save-v1";
 const STEP_MS = 168;
@@ -174,8 +175,7 @@ export function saveGame(g: GameState): boolean {
       supplyDay: g.supplyDay,
       gates: g.gates,
     };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
-    return true;
+    return storage.setItem(SAVE_KEY, JSON.stringify(payload));
   } catch {
     return false;
   }
@@ -183,7 +183,7 @@ export function saveGame(g: GameState): boolean {
 
 export function loadGame(): GameState | null {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
+    const raw = storage.getItem(SAVE_KEY);
     if (!raw) return null;
     const p = JSON.parse(raw);
     if (p?.version !== 1 && p?.version !== 2 && p?.version !== SAVE_VERSION) return null;
@@ -231,7 +231,7 @@ export function loadGame(): GameState | null {
 
 export function clearSave() {
   try {
-    localStorage.removeItem(SAVE_KEY);
+    storage.removeItem(SAVE_KEY);
   } catch {
     // ignore
   }
